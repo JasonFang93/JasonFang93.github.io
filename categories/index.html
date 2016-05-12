@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="ajax 302 内容协商" />
+  <meta name="keywords" content="前端, fe, html, css, javascript" />
 
 
 
@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="ajax处理302不跳转，以及根据请求的不同服务端返回不同类型的数据">
-<meta property="og:type" content="article">
-<meta property="og:title" content="ajax处理302跳转与内容协商">
-<meta property="og:url" content="http://blog.youziclub.com/2016/05/12/Ajax processing 302 jump and content negotiation/index.html">
+<meta name="description" content="踏踏实实做好每一天~">
+<meta property="og:type" content="website">
+<meta property="og:title" content="柚子君">
+<meta property="og:url" content="http://blog.youziclub.com/categories/index.html">
 <meta property="og:site_name" content="柚子君">
-<meta property="og:description" content="ajax处理302不跳转，以及根据请求的不同服务端返回不同类型的数据">
-<meta property="og:updated_time" content="2016-05-12T10:43:23.296Z">
+<meta property="og:description" content="踏踏实实做好每一天~">
+<meta property="og:updated_time" content="2016-05-12T11:44:03.841Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ajax处理302跳转与内容协商">
-<meta name="twitter:description" content="ajax处理302不跳转，以及根据请求的不同服务端返回不同类型的数据">
+<meta name="twitter:title" content="柚子君">
+<meta name="twitter:description" content="踏踏实实做好每一天~">
 
 
 
@@ -113,7 +113,13 @@
   };
 </script>
 
-  <title> ajax处理302跳转与内容协商 | 柚子君 </title>
+  <title>
+  
+
+  
+     | 柚子君
+  
+</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -134,7 +140,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-left  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -257,182 +263,9 @@
 
   <div id="posts" class="posts-expand">
     
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                ajax处理302跳转与内容协商
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-12T18:21:00+08:00" content="2016-05-12">
-              2016-05-12
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/12/Ajax processing 302 jump and content negotiation/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/12/Ajax processing 302 jump and content negotiation/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
+      
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>随着各种前端框架的的蓬勃发展，单页面应用（<code>SPA</code>）无论在移动端的<code>webapp</code>/<code>Hybrid</code>，还是各种PC内部管理系统都有着他们独特的身影。这种无页面刷新切换页面的实现，借助于<code>ajax</code>的异步请求。</p>
-<h2 id="ajax处理302"><a href="#ajax处理302" class="headerlink" title="ajax处理302"></a>ajax处理302</h2><p>虽然<code>ajax</code>异步请求有着诸多的优势和方便，但是它也不是万能的，总有些地方是<code>ajax</code>的手无法触及的，就像服务器状态码<code>302 Found</code>，<code>ajax</code>的回调对这个服务器响应是透明的，不能直接进行跳转，而在同步请求中，浏览器自动跳转，那么问题来了，在一些情况下，我需要用<code>ajax</code>异步请求，但是此时<code>cookie/session</code>失效，必须进行跳转重新登录，而且即使不是单页应用，只要存在异步提交数据，都将面临这个问题。</p>
-<p>解决办法：<br>    1、避免使用<code>ajax</code>提交，采用<code>form</code>表单提交；少数业务场景可行，多数情况是无法避免使用<code>ajax</code><br>    2、急需后端配合：在需要进行302跳转的地方，后端统一返回200，在返回的<code>json</code>数据中使用特殊的错误状态码，以及对应需要跳转的url链接，前端根据特殊的错误码和<code>url</code>，用<code>location</code>进行跳转。</p>
-<p>之前看到有人说直接可以在回调函数中，通过<code>XMLHttpRequest</code>对象的<code>status</code>值（<code>xhr.status == 302</code>）来进行判断并做跳转，但是这明显是不可行的。因为当服务器返回给浏览器<code>302</code>，浏览器并不是直接进行<code>ajax</code>回调处理，而是先去执行<code>302</code>重定向（从<code>response header</code>中读取<code>location</code>信息，再向<code>location</code>中的<code>url</code>进行请求，在收到这个请求的响应后，最后才对<code>ajax</code>回调做处理），流程如下：<br><code>ajax -&gt; browser -&gt; server -&gt;302 -&gt; browser(redirect) -&gt; server -&gt; browser -&gt; ajax callbacks</code><br>在最后的<code>ajax</code>回调中获得的状态码可能是<code>404</code>，也有可能是<code>200</code>，原因是在<code>302</code>重定向后，浏览器对<code>location</code>中<code>url</code>进行请求，可能这个请求的<code>url</code>在系统中的确存在，此时返回的就是<code>200</code>，如果不存在，或请求失败，则可能是<code>404</code>了。</p>
-<h2 id="内容协商"><a href="#内容协商" class="headerlink" title="内容协商"></a>内容协商</h2><p>什么是内容协商</p>
-<blockquote>
-<p>一个资源可能会有多种不同的表现形式，比如，可能会有不同语言或者媒体类型的版本甚至其组合。最常用的选择方法是提供一个索引页以供选择。但是由于浏览器可以在请求头信息中提供其首选项的表现形式， 因此就有可能让服务器自动选择。</p>
-</blockquote>
-<p>举个栗子：复杂的请求，浏览器表明，可以接受法语和英语，但最好是法语； 接受各种媒体类型，最好是HTML，纯文件或其他文本类型也可以； 最好是GIF或JPEG，其他媒体类型也可以，并允许其他媒体类型作为最终表现形式：</p>
-<blockquote>
-<p>Accept-Language: fr; q=1.0, en; q=0.5<br>Accept: text/html; q=1.0, text/<em>; q=0.8, image/gif; q=0.6, image/jpeg; q=0.6, image/</em>; q=0.5, <em>/</em>; q=0.1</p>
-</blockquote>
-<p>用简单的话来说，就是前端想后端给它提供什么资源，包括格式，类型等，通过在<code>request Header</code>中设置，服务端根据前端的请求报头，给前端返回恰当的数据，这是一个多么和谐的方式啊~</p>
-<p>至于为何会在本文中提及，主要是一个应用中并不是所有的<code>ajax</code>请求都是你能完全控制的，例如利用第三方登录，<code>ajax</code>请求是第三方发出的，这时候需要进行跳转，结合文章前半部分的内容，如果这个登录跳转也交给前端来处理，那就gg了，因为这个请求根本就不是前端发出的，所以还得利用<code>302</code>跳转，这两者结合起来看，就是矛盾的了，所以内容协商的策略就能够派上用场了~<br>系统前端自身的请求中通过设置报头<code>Accept</code>为<br><code>application/json, text/javascript, */*; q=0.01</code><br>（例如<code>jquery</code>可以通过设置<code>dataType</code>为<code>json</code>），当需要<code>302</code>跳转时后端返回<code>json</code>数据给前端，由前端来完成跳转，而普通的请求一般为<br><code>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</code><br>可以直接<code>302</code>重定向。</p>
-
-      
-    </div>
-
-    <div>
-      
-        
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/javascript/" rel="tag">#javascript</a>
-          
-            <a href="/tags/ajax/" rel="tag">#ajax</a>
-          
-            <a href="/tags/302/" rel="tag">#302</a>
-          
-            <a href="/tags/http/" rel="tag">#http</a>
-          
-        </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/05/08/unit test——Qunit/" rel="next" title="单元测试——Qunit">
-                <i class="fa fa-chevron-left"></i> 单元测试——Qunit
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-        <div class="ds-share flat" data-thread-key="2016/05/12/Ajax processing 302 jump and content negotiation/"
-     data-title="ajax处理302跳转与内容协商"
-     data-content=""
-     data-url="http://blog.youziclub.com/2016/05/12/Ajax processing 302 jump and content negotiation/">
-  <div class="ds-share-inline">
-    <ul  class="ds-share-icons-16">
-
-      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
-      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
-      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
-      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
-      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
-
-    </ul>
-    <div class="ds-share-icons-more">
-    </div>
-  </div>
-</div>
-      
-    </div>
   </div>
 
 
@@ -443,8 +276,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/12/Ajax processing 302 jump and content negotiation/"
-           data-title="ajax处理302跳转与内容协商" data-url="http://blog.youziclub.com/2016/05/12/Ajax processing 302 jump and content negotiation/">
+      <div class="ds-thread" data-thread-key="categories/index.html"
+           data-title="" data-url="http://blog.youziclub.com/categories/index.html">
       </div>
     
   </div>
@@ -468,17 +301,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel ">
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars3.githubusercontent.com/u/13890076?v=3&s=460"
@@ -535,17 +359,6 @@
 
       </section>
 
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ajax处理302"><span class="nav-number">1.</span> <span class="nav-text">ajax处理302</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内容协商"><span class="nav-number">2.</span> <span class="nav-text">内容协商</span></a></li></ol></div>
-            
-          </div>
-        </section>
       
 
     </div>
@@ -649,10 +462,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
 
   
 
