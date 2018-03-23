@@ -1,0 +1,639 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RN,QRN," />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="React Native （以下简称 RN）是 Facebook 开源的一款跨平台移动端开发框架，它与 Hybrid 方案相比，性能更好，拥有更流畅的用户体验，而与原生客户端开发相比，开发成本低，效率高，能够快速进行版本迭代和产品上线。我们从16年3月份开始在公司大范围使用 QRN（基于 RN 进行深度定制的移动开发框架），截至目前已有四十多个项目接入，我们在 RN 开发方面有着大量的踩坑经验，本">
+<meta name="keywords" content="RN,QRN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RN 打包那些事儿">
+<meta property="og:url" content="http://blog.youziclub.com/2017/11/15/RN打包那些事儿/index.html">
+<meta property="og:site_name" content="柚子君">
+<meta property="og:description" content="React Native （以下简称 RN）是 Facebook 开源的一款跨平台移动端开发框架，它与 Hybrid 方案相比，性能更好，拥有更流畅的用户体验，而与原生客户端开发相比，开发成本低，效率高，能够快速进行版本迭代和产品上线。我们从16年3月份开始在公司大范围使用 QRN（基于 RN 进行深度定制的移动开发框架），截至目前已有四十多个项目接入，我们在 RN 开发方面有着大量的踩坑经验，本">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/c4b5f11bly1flggag4y6fj20du06vt9r.jpg">
+<meta property="og:updated_time" content="2018-03-23T16:11:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RN 打包那些事儿">
+<meta name="twitter:description" content="React Native （以下简称 RN）是 Facebook 开源的一款跨平台移动端开发框架，它与 Hybrid 方案相比，性能更好，拥有更流畅的用户体验，而与原生客户端开发相比，开发成本低，效率高，能够快速进行版本迭代和产品上线。我们从16年3月份开始在公司大范围使用 QRN（基于 RN 进行深度定制的移动开发框架），截至目前已有四十多个项目接入，我们在 RN 开发方面有着大量的踩坑经验，本">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/c4b5f11bly1flggag4y6fj20du06vt9r.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> RN 打包那些事儿 | 柚子君 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">柚子君</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              RN 打包那些事儿
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        
+        <span class="post-time">
+          <!-- 发表于 -->
+          <span class="iconfont">&#xf19f;</span>
+          <time itemprop="dateCreated" datetime="2017-11-15T00:00:00+08:00" content="2017-11-15">
+            2017-11-15
+          </time>
+        </span>
+
+        
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp;
+            <!-- 分类于 -->
+            <span class="iconfont">&#xf1d0;</span>
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/技术/" itemprop="url" rel="index">
+                  <span itemprop="name">技术</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+
+        
+
+        
+        <span class="post-comments-count">
+          <!-- 暂不支持评论 &nbsp; | &nbsp;
+          <a class="cloud-tie-join-count" href="javascript:void(0);">
+           <span class="join-count" style="color:black">0</span>
+           <span class="join-text">人评论</span>
+         </a> -->
+         
+        </span>
+      </div>
+      
+
+
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p><a href="https://github.com/facebook/react-native/tree/v0.48.1" target="_blank" rel="noopener">React Native</a> （以下简称 RN）是 Facebook 开源的一款跨平台移动端开发框架，它与 Hybrid 方案相比，性能更好，拥有更流畅的用户体验，而与原生客户端开发相比，开发成本低，效率高，能够快速进行版本迭代和产品上线。我们从16年3月份开始在公司大范围使用 <a href="https://ued.qunar.com/qrn/" target="_blank" rel="noopener">QRN</a>（基于 RN 进行深度定制的移动开发框架），截至目前已有四十多个项目接入，我们在 RN 开发方面有着大量的踩坑经验，本文以 RN 打包作为切入点，分享一下 RN 官方在打包方面做了哪些处理，以及 QRN 在打包上进行了怎样的定制。<br><a id="more"></a></p>
+<p><img src="https://ws1.sinaimg.cn/large/c4b5f11bly1flggag4y6fj20du06vt9r.jpg" alt="rn-metro-bundler"></p>
+<h2 id="RN-打包"><a href="#RN-打包" class="headerlink" title="RN 打包"></a>RN 打包</h2><p>官方 RN 打包，基于一款 node 命令行工具 react-native-cli，通过执行 <code>bundle</code> 命令，将项目所有的的 js 文件打包成一个 bundle 文件，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ./index.ios.bundle --sourcemap-output ./index.ios.map --assets-dest ./asserts</span><br></pre></td></tr></table></figure>
+<p>iOS 通过 <code>NSBundle URLForResource</code> 方法加载，Android 通过 <code>loadScriptFromString</code> 加载 bundle 文件。RN 打包简而言之可以理解为对项目的所有模块（RN 认为一切皆模块，包括 js、json 和图片等）进行拆包、去重过滤、代码转化、重组成新的 bundle 的过程，以下笔者将会结合官方的 <a href="https://github.com/facebook/metro-bundler/tree/2a64bd390e1d546bf62e1437b8a8aa8a839990a2" target="_blank" rel="noopener">metro-bundler</a> 工具来一探打包的奥妙。</p>
+<p><img src="https://ws1.sinaimg.cn/large/c4b5f11bly1flhfzogn2mj20ac0bhjrp.jpg" alt="总体流程"></p>
+<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><p>在分析官方打包的具体实现前，可以先从命令行入手，来提前了解下官方打包，通过指定参数来进行打包，以下主要介绍 <code>entry-file、platform、dev、bundle-output、sourcemap-output</code> 等几个重要的参数：</p>
+<ul>
+<li><strong>entry-file</strong>：即入口文件，打包时以该文件作为入口，一步步进行模块分析处理。</li>
+<li><strong>platform</strong>：用于区分打包什么平台的 bundle</li>
+<li><strong>dev</strong>：用于区分 bundle 使用环境，非 dev 时，会对代码进行 minified</li>
+<li><strong>bundle-output</strong>：打包产物输出地址，即打包好的 bundle 存放地址</li>
+<li><strong>sourcemap-output</strong>：打包时生成对应的 <a href="http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html" target="_blank" rel="noopener">sourcemap</a> 文件存放地址，在跟踪查找错误或崩溃时，能帮助开发快速定位到代码</li>
+<li><strong>assets-dest</strong>：bundle 中使用的静态资源文件存放地址</li>
+</ul>
+<h3 id="metro-bundler"><a href="#metro-bundler" class="headerlink" title="metro-bundler"></a>metro-bundler</h3><p>RN 官方从 0.46.0 版本开始，出于对打包速度、可靠性和更好的可拓展性等方面的<a href="https://github.com/facebook/react-native/issues/13976" target="_blank" rel="noopener">考虑</a>，将 RN 的打包模块 packager 从 RN 项目中分离，重新命名为 metro-bundler。</p>
+<h4 id="polyfill"><a href="#polyfill" class="headerlink" title="polyfill"></a>polyfill</h4><p>metro-bundler 在进入正式拆包前，先在 js 解释器上挂载  <code>global.__DEV__</code> 变量，该变量主要用于区分打包执行环境，同时定义了模块系统函数，包括 <code>__d</code>（即 <code>define</code>）函数、<code>require</code> 函数，这样 RN 也就有了自身的模块系统。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// metro-bundler/src/Resolver/index.js</span></span><br><span class="line">getModuleSystemDependencies(&#123;dev = <span class="literal">true</span>&#125;: &#123;dev?: boolean&#125;): <span class="built_in">Array</span>&lt;Module&gt; &#123;</span><br><span class="line">    <span class="comment">// global.__DEV__</span></span><br><span class="line">    <span class="keyword">const</span> prelude = dev</span><br><span class="line">        ? pathJoin(__dirname, <span class="string">'polyfills/prelude_dev.js'</span>)</span><br><span class="line">        : pathJoin(__dirname, <span class="string">'polyfills/prelude.js'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回 polyfills/require.js，定义模块系统函数</span></span><br><span class="line">    <span class="keyword">const</span> moduleSystem = defaults.moduleSystem;</span><br><span class="line">    <span class="keyword">return</span> [prelude, moduleSystem].map(<span class="function"><span class="params">moduleName</span> =&gt;</span></span><br><span class="line">        <span class="comment">// polyfill 处理</span></span><br><span class="line">        <span class="keyword">this</span>._depGraph.createPolyfill(&#123;</span><br><span class="line">            file: moduleName,</span><br><span class="line">            id: moduleName,</span><br><span class="line">            dependencies: [],</span><br><span class="line">        &#125;),</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，这两个模块会被插入到 <code>response.dependencies</code> 最前列。<br>另外，RN 对部分 es6、es7 的方法 polyfill 支持，包括 Array、Object 和 Number 等，具体可以查阅 <a href="https://github.com/facebook/react-native/tree/v0.48.1/Libraries/polyfills" target="_blank" rel="noopener">polyfills</a> 文件，此处不再赘述，感兴趣可以自行研究。</p>
+<h4 id="拆包"><a href="#拆包" class="headerlink" title="拆包"></a>拆包</h4><p>拆包可以理解为对依赖进行模块预处理，根据资源入口，解析其所依赖的直接模块，调用 Module 构造器解析出模块 <code>path、_options 和 _transformCode</code> 等信息，并返回这些依赖自身所依赖的模块，然后，依次以返回的这些模块作为新的资源入口，进行解析直至广度遍历所有的依赖。<br>拆包具体实现是通过 <code>_preprocessPotentialDependencies</code> 方法，以指定的 <code>entry-file</code> 作为资源入口，依次解析它的依赖，并利用这些模块，依据 <code>filePath</code> 循环调用 <code>resolveDependency</code>，存入到 <code>ModuleCache</code> 实例中，最后以数组 <code>dependencyModules</code> 返回这些实例化后的 module；再次循环，从 <code>dependencyModules</code> 数组中依次取最后一个元素，递归调用 <code>preprocessModule</code> 和 <code>tryResolveModuleDependencies</code> 方法预处理所有的模块；当然，metro-bundler 设置了一个 <code>Set</code> 类型的 <code>visitedModulePaths</code> 变量进行过滤，实例化一个新的模块时，会将之添加到 <code>visitedModulePaths</code> 中，当出现已实例化过的模块，则不会再放入 <code>dependencyModules</code> 中，这避免了重复实例化同一个模块的问题。</p>
+<p><img src="https://ws1.sinaimg.cn/large/c4b5f11bly1flhln6pxygj20np0kvjt4.jpg" alt="模块拆包"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// metro-bundler/src/node-haste/DependencyGraph/ResolutionRequest.js</span></span><br><span class="line">_preprocessPotentialDependencies(</span><br><span class="line">    transformOptions: TransformWorkerOptions,</span><br><span class="line">    <span class="built_in">module</span>: TModule,</span><br><span class="line">    onProgress: <span class="function">(<span class="params">moduleCount: number</span>) =&gt;</span> mixed,</span><br><span class="line">): <span class="keyword">void</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> visitedModulePaths = <span class="keyword">new</span> <span class="built_in">Set</span>();</span><br><span class="line">    <span class="comment">// 此处的 module 为入口文件模块</span></span><br><span class="line">    <span class="keyword">const</span> pendingBatches = [</span><br><span class="line">        <span class="keyword">this</span>.preprocessModule(transformOptions, <span class="built_in">module</span>, visitedModulePaths),</span><br><span class="line">    ];</span><br><span class="line">    onProgress(visitedModulePaths.size);</span><br><span class="line">    <span class="keyword">while</span> (pendingBatches.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// dependencyModules：module（作为参数传给 preprocessModule） 依赖的子模块数组，已经过预处理过，数组元素将作为新的入口模块，预处理其子依赖</span></span><br><span class="line">        <span class="keyword">const</span> dependencyModules = pendingBatches.pop();</span><br><span class="line">        <span class="keyword">while</span> (dependencyModules.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// dependencyModule 作为新的入口模块，预处理其子依赖，通过遍历依次处理所有模块</span></span><br><span class="line">            <span class="keyword">const</span> dependencyModule = dependencyModules.pop();</span><br><span class="line">            <span class="keyword">const</span> deps = <span class="keyword">this</span>.preprocessModule(</span><br><span class="line">                transformOptions,</span><br><span class="line">                dependencyModule,</span><br><span class="line">                visitedModulePaths,</span><br><span class="line">            );</span><br><span class="line">            <span class="comment">// 将预处理过的模块 deps 放入 pendingBatches，达到递归调用目的</span></span><br><span class="line">            pendingBatches.push(deps);</span><br><span class="line">            onProgress(visitedModulePaths.size);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="去重过滤"><a href="#去重过滤" class="headerlink" title="去重过滤"></a>去重过滤</h4><p>在拆包的过程中，会发现多个模块依赖同一个模块的情况，在进行模块预处理时进行的过滤，只能避免对统一模块重复预处理，没有真正将重复的模块过滤掉，因此还需要对重复模块做去重过滤。<br>去重的实现同样是以 <code>entry-file</code> 文件作为入口模块 <code>entry</code>，调用 <code>collectedDependencies.get</code> 方法，通过其中的 <code>collect</code> 函数，将 <code>entry</code> 模块的依赖拆分成 <code>[[depNames1, depNames2, ...], [dependencies1, dependencies2, ...]]</code> 形式的数组（<code>depNames</code> 和 <code>dependencies</code> 一一对应，前者为依赖名，后者为具体的预处理过的依赖）；再在 <code>crawlDependencies</code> 方法中遍历 <code>[dependencies1, dependencies2, ...]</code> 数组，将每个元素，即 <code>dependencyModules</code> 依次作为新的资源入口，递归调用 <code>collectedDependencies.get</code>，<code>get</code> 方法会将入口模块以 <code>{entry: collect(entry)}</code> 形式保存到一个 <code>Map</code> 中，在保存前会通过 <code>Map.has(entry)</code> 检查是否存在，以达到去重的目的。最后，返回 <code>entry-file</code> 模块的直接依赖。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// metro-bundler/src/node-haste/DependencyGraph/ResolutionRequest.js</span></span><br><span class="line"><span class="comment">// depNames：模块名数组，dependencies：对应模块数组</span></span><br><span class="line"><span class="keyword">const</span> crawlDependencies = <span class="function">(<span class="params">mod, [depNames, dependencies]</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> filteredPairs = [];</span><br><span class="line"></span><br><span class="line">    dependencies.forEach(<span class="function">(<span class="params">modDep, i</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> name = depNames[i];</span><br><span class="line">        <span class="keyword">if</span> (modDep == <span class="literal">null</span>) &#123;</span><br><span class="line">            debug(</span><br><span class="line">                <span class="string">'WARNING: Cannot find required module `%s` from module `%s`'</span>,</span><br><span class="line">                name,</span><br><span class="line">                mod.path,</span><br><span class="line">            );</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> filteredPairs.push([name, modDep]);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    response.setResolvedDependencyPairs(mod, filteredPairs);</span><br><span class="line">    <span class="comment">// 遍历取到所有的模块</span></span><br><span class="line">    <span class="keyword">const</span> dependencyModules = filteredPairs.map(<span class="function">(<span class="params">[, m]</span>) =&gt;</span> m);</span><br><span class="line">    <span class="comment">// 统计 newDependencies 的长度主要用于 onProgress 显示进度，可忽略</span></span><br><span class="line">    <span class="keyword">const</span> newDependencies = dependencyModules.filter(</span><br><span class="line">        m =&gt; !collectedDependencies.has(m),</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (onProgress) &#123;</span><br><span class="line">        finishedModules += <span class="number">1</span>;</span><br><span class="line">        totalModules += newDependencies.length;</span><br><span class="line">        onProgress(</span><br><span class="line">            finishedModules,</span><br><span class="line">            <span class="built_in">Math</span>.max(totalModules, preprocessedModuleCount),</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (recursive) &#123; <span class="comment">// recursive 为标志位，默认为 true</span></span><br><span class="line">        <span class="comment">// doesn't block the return of this function invocation, but defers</span></span><br><span class="line">        <span class="comment">// the resulution of collectionsInProgress.done.then(...)</span></span><br><span class="line">        <span class="comment">// 遍历 dependencyModules，递归调用 collectedDependencies.get</span></span><br><span class="line">        dependencyModules.forEach(<span class="function"><span class="params">dependency</span> =&gt;</span></span><br><span class="line">            collectedDependencies.get(dependency),</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 返回 rootDependencies</span></span><br><span class="line">    <span class="keyword">return</span> dependencyModules;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// metro-bundler/src/node-haste/lib/MapWithDefaults.js</span></span><br><span class="line">get(key: TK): TV &#123;</span><br><span class="line">    <span class="comment">// 去重</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.has(key)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Map</span>.prototype.get.call(<span class="keyword">this</span>, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// _factory 即为 collect 方法</span></span><br><span class="line">    <span class="keyword">const</span> value = <span class="keyword">this</span>._factory(key);</span><br><span class="line">    <span class="comment">// 保存 &#123;entry: collect(entry)&#125;</span></span><br><span class="line">    <span class="keyword">this</span>.set(key, value);</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上述过滤过程中，仅仅只返回了 <code>entry-file</code> 的直接模块，而其他模块只是保存在 <code>Map</code> 中，还缺少最后一步 —— 调用 <code>traverse</code> 方法依次将这些模块保存到 <code>response.dependencies</code> 中，具体实现可以查看流程图和相应代码，由于不难理解，故在此不做更细致的分析了。</p>
+<p><img src="https://ws1.sinaimg.cn/large/c4b5f11bly1flhln6q4ruj20u10i9aca.jpg" alt="去重过滤"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="built_in">Promise</span>.all([</span><br><span class="line">        <span class="comment">// 获取 entry-file 模块所有的直接依赖</span></span><br><span class="line">        collectedDependencies.get(entry),</span><br><span class="line">        collectionsInProgress.done,</span><br><span class="line">    ])</span><br><span class="line">    .then(<span class="function">(<span class="params">[rootDependencies]</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.all(</span><br><span class="line">            <span class="comment">// 遍历 collectedDependencies，获取保存的所有 dependency</span></span><br><span class="line">            <span class="built_in">Array</span>.from(collectedDependencies, resolveKeyWithPromise),</span><br><span class="line">        ).then(<span class="function"><span class="params">moduleToDependenciesPairs</span> =&gt;</span> [</span><br><span class="line">            rootDependencies,</span><br><span class="line">            <span class="keyword">new</span> MapWithDefaults(<span class="function"><span class="params">()</span> =&gt;</span> [], moduleToDependenciesPairs),</span><br><span class="line">        ]);</span><br><span class="line">    &#125;)</span><br><span class="line">    .then(<span class="function">(<span class="params">[rootDependencies, moduleDependencies]</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// serialize dependencies, and make sure that every single one is only</span></span><br><span class="line">        <span class="comment">// included once</span></span><br><span class="line">        <span class="keyword">const</span> seen = <span class="keyword">new</span> <span class="built_in">Set</span>([entry]);</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">traverse</span>(<span class="params">dependencies</span>) </span>&#123;</span><br><span class="line">            dependencies.forEach(<span class="function"><span class="params">dependency</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="comment">// 再次去重，moduleDependencies 中包含了 rootDependencies，在 插入到 response.dependencies 前需要做这层过滤</span></span><br><span class="line">                <span class="keyword">if</span> (seen.has(dependency)) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                seen.add(dependency);</span><br><span class="line">                <span class="comment">// 依次将 dependency 插入到 response.dependencies</span></span><br><span class="line">                response.pushDependency(dependency);</span><br><span class="line">                <span class="comment">// 递归调用 traverse</span></span><br><span class="line">                traverse(moduleDependencies.get(dependency));</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        traverse(rootDependencies);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="ModuleTransport-和合并"><a href="#ModuleTransport-和合并" class="headerlink" title="ModuleTransport 和合并"></a>ModuleTransport 和合并</h4><p>经过拆分、去重等处理，整个打包过程即将进入尾声 —— 将 <code>response.dependencies</code> 中的模块重新组合成一个新的 bundle。<br>首先，遍历 <code>response.dependencies</code> ，对其每个 module 进行 <code>ModuleTransport</code> 处理，这里需要区分普通 module 和 asset module，因为对应的解析方法是不同的；解析 module，获取并返回 transformedModule（包括 <code>code、sourceCode、sourcePath、map 和 polyfill</code> 等）。<br>此时，原材料均已准备完毕，开始进入组装阶段 <code>addModule</code>，针对 polyfill 处理过的模块调用 <code>definePolyfillCode</code> 方法进行包装，即用立即执行函数包装，polyfill 过的代码作为立即执行函数的主体；其他模块则调用 <code>defineModuleCode</code> 方法包装，即调用 <code>__d</code> 函数来定义模块，同时，将通过构建 <code>resolveDeps</code> 对象来处理其他多个模块依赖某一模块问题，在此处不过多分析，有兴趣的可以自行<a href="https://github.com/facebook/metro-bundler/blob/2a64bd390e1d546bf62e1437b8a8aa8a839990a2/packages/metro-bundler/src/Resolver/index.js#L184" target="_blank" rel="noopener">探索</a>。<br>至此，所有的模块都已定义，将代码放在闭包中，注册到全局的 module 变量中。此时仅仅只是定义了模块，如果要让代码执行起来，最后需要一根线将所有 module 串起来，调用必要的代码 —— 通过 <code>finalize</code> 方法 require <code>InitializeCore</code> 和 <code>MainModule</code>（即 <code>entry-file</code> 资源入口）模块。当完成这一步，RN 的打包基本上就完成了。</p>
+<p><img src="https://ws1.sinaimg.cn/large/c4b5f11bly1flhfzog8brj20ft0dn74s.jpg" alt="代码转化与重组"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// metro-bundler/src/Bundler/Bundle.js</span></span><br><span class="line">finalize(options: FinalizeOptions) &#123;</span><br><span class="line">    options = options || &#123;&#125;;</span><br><span class="line">    <span class="keyword">if</span> (options.runModule) &#123;</span><br><span class="line">        <span class="comment">// 此处 require InitializeCore 模块</span></span><br><span class="line">        <span class="comment">// RN 在 metro-bundler/src/defaults.js 中默认添加了 InitializeCore 模块</span></span><br><span class="line">        options.runBeforeMainModule.forEach(<span class="keyword">this</span>._addRequireCall, <span class="keyword">this</span>);</span><br><span class="line">        <span class="comment">// require MainModule</span></span><br><span class="line">        <span class="keyword">this</span>._addRequireCall(<span class="keyword">this</span>.getMainModuleId());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// freeze 处理新 bundle 的 __modules 和 __assets</span></span><br><span class="line">    <span class="keyword">super</span>.finalize(options);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="QRN-打包定制化"><a href="#QRN-打包定制化" class="headerlink" title="QRN 打包定制化"></a>QRN 打包定制化</h2><p>尽管 RN 官方的打包工具的功能比较完善了，但的确仍有些地方可以进行优化：</p>
+<ul>
+<li>打包生成的 bundle 文件太大</li>
+<li>对 bundle 进行拆分后，模块关系变动使得分拆后的 bundle 难以保持一致</li>
+<li>静态资源离线</li>
+</ul>
+<h3 id="bundle-拆分"><a href="#bundle-拆分" class="headerlink" title="bundle 拆分"></a>bundle 拆分</h3><p>metro-bundler 在打包时，会将所有的文件，包括框架组件、业务逻辑代码，都打包到一个 bundle 中，笔者试着将一个没有任何业务逻辑代码的 AwesomeProject 项目，打包生成的 bundle 文件 size 约为 490 k。Qunar 拥有酒店、机票、旅游度假、门票和火车票等多个业务线，随着业务不断扩大、业务复杂性不断上升，生成的 bundle 文件会逐渐增大，将会使得客户端 size 的压力越来越大（虽然从 iOS 的 App Store 上使用流量下载客户端的限制从 100 M 放宽到 150 M）。<br>metro-bundler 这种打包成一个 bundle 的策略对于 Qunar 来说，必定是不能接受的。在 Hybrid 开发中，在解决文件过大问题的一个策略 —— 拆包，同样，对 RN bundle 拆分，也是适用的。metro-bundler 将项目的所有代码打包成一个 bundle，其中包括 RN 框架 js 文件和一些十分常用的第三方模块，不难发现，多个项目使用 RN 方案，生成的 bundle 文件将会包含多份一模一样的框架 js 和常用的第三方模块文件；因此，我们采取的策略是将框架代码和业务逻辑拆成两个 bundle，这样一方面解决了 bundle 文件大，代码重复问题，另一方面业务只需要将重心放在业务逻辑上，框架由我们来维护。</p>
+<p><img src="https://ws1.sinaimg.cn/large/c4b5f11bly1flggh2fumnj20gy07egly.jpg" alt="jsbundle"></p>
+<p>我们在打包时先后调用两次 <code>bundle</code> 方法，通过 <code>bundleType</code> 参数进行区分框架 bundle 和业务 bundle。同时，在打包时默认不指定 <code>entry-file</code>，完全交给打包工具 QRNPackager 来处理，打框架 bundle 时默认指定一个 <code>platform.js</code> 文件，该文件 require RN 框架、QRN（包括自定义的组件和模块等），以及一些常用的第三方模块；而业务 bundle 则以项目入口文件为 <code>entry-file</code> 进行打包，当然仅仅是这样还不行，我们在 metro-bundler 拆包、去重过滤完成时，对 <code>response.dependencies</code> 再处理，通过 <code>platformDependencies</code>, <code>bizDependencies</code> 两个配置项，分别生成新的 <code>response.dependencies</code>。然后执行 metro-bundler 的后续流程。</p>
+<h3 id="以实际路径代替-module-ID-进行引用"><a href="#以实际路径代替-module-ID-进行引用" class="headerlink" title="以实际路径代替 module ID 进行引用"></a>以实际路径代替 module ID 进行引用</h3><p>metro-bundler 打包处理模块时，以递增的方式给每个模块一个 module ID，使得文件直接通过 <code>require(module ID)</code> 的方式引用其他模块；当然，一个项目的所有模块都在一个 bundle 中是没问题的，但进行 bundle 拆分后，当框架新增或删除一个依赖时，因为模块编号的方式使得在该状况下，后续的模块的 module ID 将会错位，这将造成升级框架 bundle 的难度，每次升级，其他业务 bundle 相应的需要回归测试，加大了开发测试成本。我们的选择是直接舍弃 module ID 的引用方式，直接使用模块路径进行引用，这样无论怎么增减模块，都不会出现模块引用错误的问题，做法也比较简单，重写了 <code>resolutionResponse.getModuleId</code> 方法，虽然会增大一点 bundle 的 size。</p>
+<h3 id="静态资源离线"><a href="#静态资源离线" class="headerlink" title="静态资源离线"></a>静态资源离线</h3><p>项目开发中少不了使用图片、字体等离线资源的使用，如果这些静态文件直接内置到本地，一方面不方便管理，另一方面也会增大 size 的压力。因此，一般采取的策略是将静态资源上传到服务器，但这也会导致其他问题 —— 用户流量消耗，增加请求，加载资源变慢影响性能。<br>针对种种问题，我们采取的策略是将开发时将资源上传到服务器，代码中直接通过 url 地址获取资源，同时对打包工具进行了改造，通过不同的配置文件记录项目使用的图片和字体等资源的 url 地址，打包时将之写入到 <code>staticAssets.json</code> 文件；另外客户端也进行相应的处理，第一次加载 bundle 时，会进行资源离线处理。当客户端加载静态资源时，请求会被拦截器拦截，优先使用本地的离线静态资源，如果本地没有对应资源，才会去服务器上获取。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>笔者近期在升级 RN 的同时较系统地阅读了 metro-bundler 源码，结合自身的理解整理成该篇文章，希望对想要了解 RN 打包或正在解决 RN 打包问题的朋友有一点帮助。如果行文中有错误，敬请斧正。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RN/" rel="tag">#RN</a>
+          
+            <a href="/tags/QRN/" rel="tag">#QRN</a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/logo.jpeg"
+               alt="JasonFang" />
+          <p class="site-author-name" itemprop="name">JasonFang</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RN-打包"><span class="nav-number">1.</span> <span class="nav-text">RN 打包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令"><span class="nav-number">1.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#metro-bundler"><span class="nav-number">1.2.</span> <span class="nav-text">metro-bundler</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#polyfill"><span class="nav-number">1.2.1.</span> <span class="nav-text">polyfill</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拆包"><span class="nav-number">1.2.2.</span> <span class="nav-text">拆包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#去重过滤"><span class="nav-number">1.2.3.</span> <span class="nav-text">去重过滤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ModuleTransport-和合并"><span class="nav-number">1.2.4.</span> <span class="nav-text">ModuleTransport 和合并</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QRN-打包定制化"><span class="nav-number">2.</span> <span class="nav-text">QRN 打包定制化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bundle-拆分"><span class="nav-number">2.1.</span> <span class="nav-text">bundle 拆分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以实际路径代替-module-ID-进行引用"><span class="nav-number">2.2.</span> <span class="nav-text">以实际路径代替 module ID 进行引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态资源离线"><span class="nav-number">2.3.</span> <span class="nav-text">静态资源离线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写在最后"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a class="theme-link" href="https://github.com/JasonFang93">JasonFang</a></span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io" target="_blank">Hexo</a>
+</div>
+
+<div class="powered-by">
+   皖ICP备15004229号
+</div>
+
+<div class="theme-info">
+  Clone theme -
+  <a class="theme-link" href="https://github.com/xirong/hexo-theme-next/" target="_blank">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
