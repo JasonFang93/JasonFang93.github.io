@@ -1,0 +1,785 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CSS," />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述 对于块级元素，CSS属性line-height指定了元素内部line-boxes的最小高度。 对于非替代行内元素，line-height用于计算line box的高度。 对于替代行内元素，如button 或其他input元素，line-height没有影响">
+<meta name="keywords" content="CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我不知道的行高——line-height">
+<meta property="og:url" content="http://blog.youziclub.com/2016/05/07/我不知道的行高——line-height/index.html">
+<meta property="og:site_name" content="柚子君">
+<meta property="og:description" content="概述 对于块级元素，CSS属性line-height指定了元素内部line-boxes的最小高度。 对于非替代行内元素，line-height用于计算line box的高度。 对于替代行内元素，如button 或其他input元素，line-height没有影响">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-23T17:13:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我不知道的行高——line-height">
+<meta name="twitter:description" content="概述 对于块级元素，CSS属性line-height指定了元素内部line-boxes的最小高度。 对于非替代行内元素，line-height用于计算line box的高度。 对于替代行内元素，如button 或其他input元素，line-height没有影响">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 我不知道的行高——line-height | 柚子君 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">柚子君</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              我不知道的行高——line-height
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        
+        <span class="post-time">
+          <!-- 发表于 -->
+          <span class="iconfont">&#xf19f;</span>
+          <time itemprop="dateCreated" datetime="2016-05-07T00:00:00+08:00" content="2016-05-07">
+            2016-05-07
+          </time>
+        </span>
+
+        
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp;
+            <!-- 分类于 -->
+            <span class="iconfont">&#xf1d0;</span>
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/技术/" itemprop="url" rel="index">
+                  <span itemprop="name">技术</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+
+        
+
+        
+        <span class="post-comments-count">
+          <!-- 暂不支持评论 &nbsp; | &nbsp;
+          <a class="cloud-tie-join-count" href="javascript:void(0);">
+           <span class="join-count" style="color:black">0</span>
+           <span class="join-text">人评论</span>
+         </a> -->
+         
+        </span>
+      </div>
+      
+
+
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+<li>对于块级元素，CSS属性line-height指定了元素内部line-boxes的最小高度。</li>
+<li>对于非替代行内元素，line-height用于计算line box的高度。</li>
+<li>对于替代行内元素，如button 或其他input元素，line-height没有影响<a id="more"></a>
+</li>
+</ul>
+<h2 id="取值"><a href="#取值" class="headerlink" title="取值"></a>取值</h2><ul>
+<li><code>normal</code><br>取决于用户代理。桌面浏览器（包括火狐浏览器）使用默认值，约为1.2，这取决于元素的 font-family。(存在差异性)</li>
+<li><code>&lt;number&gt;</code><br>所用的值是无单位数值<number>乘以元素的 font size。计算出来的值与使用数值指定的一样。大多数情况下，使用这种方法设置line-height是首选方法，在继承情况下不会有异常的值。    </number></li>
+<li><code>&lt;length&gt;</code><br>指定<length>  用于计算 line box 的高度。查看<length> 获取可能的单位。</length></length></li>
+<li><code>&lt;percentage&gt;</code><br>与元素自身的字体大小有关。计算出的值是给定的百分比值乘以元素计算出的字体大小。</li>
+<li><code>inherit</code></li>
+</ul>
+<p>缩写：line-height的值紧跟font-size的值，使用/分开（eg: font: 16px/normal arial;）</p>
+<h2 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h2><ul>
+<li>百分比<br>所有继承下来的元素会忽略本身的font-size，而使用相同的、计算出来的line-height；line-height不会随着相关的font-size做相应的比例缩放，可能导致有的地方太紧，而有的地方太松（缺点）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>element</th>
+<th>font-size</th>
+<th>line-height</th>
+<th>计算后的line-height</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>body</td>
+<td>16px</td>
+<td>120%</td>
+<td>16px * 120% = 19.2px</td>
+</tr>
+<tr>
+<td>h1</td>
+<td>32px</td>
+<td>继承的计算后的值</td>
+<td>19.2px</td>
+</tr>
+<tr>
+<td>p</td>
+<td>16px</td>
+<td>继承的计算后的值</td>
+<td>19.2px</td>
+</tr>
+<tr>
+<td>#footer</td>
+<td>12px</td>
+<td>继承的计算后的值</td>
+<td>19.2px</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>长度<br>所有继承下来的元素会忽略本身的font-size，而使用相同的继承来的line-height;也不会随着相关的font-size做相应的比例缩放。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>element</th>
+<th>font-size</th>
+<th>line-height</th>
+<th>计算后的line-height</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>body</td>
+<td>16px</td>
+<td>20px</td>
+<td>20px</td>
+</tr>
+<tr>
+<td>h1</td>
+<td>32px</td>
+<td>继承的计算后的值</td>
+<td>20px</td>
+</tr>
+<tr>
+<td>p</td>
+<td>16px</td>
+<td>继承的计算后的值</td>
+<td>20px</td>
+</tr>
+<tr>
+<td>#footer</td>
+<td>12px</td>
+<td>继承的计算后的值</td>
+<td>20px</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>normal（约为1.2）<br>所有继承下来的元素<strong>不会</strong>忽略本身的font-size，使用基于font-size算来的line-height;也不会随着相关的font-size做相应的比例缩放。现在会做相应缩放</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>element</th>
+<th>font-size</th>
+<th>line-height</th>
+<th>计算后的line-height</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>body</td>
+<td>16px</td>
+<td>normal</td>
+<td>16px * 1.2（约）= 19.2px</td>
+</tr>
+<tr>
+<td>h1</td>
+<td>32px</td>
+<td>normal</td>
+<td>32px * 1.2（约）= 38.4px</td>
+</tr>
+<tr>
+<td>p</td>
+<td>16px</td>
+<td>normal</td>
+<td>16px * 1.2（约）= 19.2px</td>
+</tr>
+<tr>
+<td>#footer</td>
+<td>12px</td>
+<td>normal</td>
+<td>11.2px * 1.2（约）= 13.44px</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>纯数字（推荐）<br>所有继承下来的元素使用基于font-size算来的line-height;会随font-size做相应缩放。（偶尔标题会有的地方比较松）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>element</th>
+<th>font-size</th>
+<th>line-height</th>
+<th>计算后的line-height</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>body</td>
+<td>16px</td>
+<td>1.5</td>
+<td>16px * 1.5 = 24px</td>
+</tr>
+<tr>
+<td>h1</td>
+<td>32px</td>
+<td>系数：1.5</td>
+<td>32px * 1.5 = 48px</td>
+</tr>
+<tr>
+<td>p</td>
+<td>16px</td>
+<td>系数：1.5</td>
+<td>16px * 1.5 = 24px</td>
+</tr>
+<tr>
+<td>#footer</td>
+<td>12px</td>
+<td>系数：1.5</td>
+<td>12px * 1.5 = 18px</td>
+</tr>
+</tbody>
+</table>
+<p>*可以考虑内容设置line-height：1.5；标题设置1.2</p>
+<h2 id="四种盒子"><a href="#四种盒子" class="headerlink" title="四种盒子"></a>四种盒子</h2><p>containing box<br>inline boxes<br>line boxes（inline boxes在containing boxes中一个接一个形成line boxes，高取决于内部最高的inline box）<br>content area（围绕文字、看不见的box，高取决于font-size）</p>
+<blockquote>
+<p>参考：<a href="http://www.slideshare.net/daemao/line-height-2470819" target="_blank" rel="noopener">http://www.slideshare.net/daemao/line-height-2470819</a></p>
+</blockquote>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ul>
+<li>单行文字居中<br>一般在做单行文字居中都是采用该策略——将line-height设置与height等高；但是height是不需要设置的</li>
+<li>固定高度的多行文字居中</li>
+<li>图片垂直居中</li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CSS/" rel="tag">#CSS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/08/单元测试——Qunit/" rel="prev">单元测试——Qunit</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/logo.jpeg"
+               alt="JasonFang" />
+          <p class="site-author-name" itemprop="name">JasonFang</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取值"><span class="nav-number">2.</span> <span class="nav-text">取值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算"><span class="nav-number">3.</span> <span class="nav-text">计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四种盒子"><span class="nav-number">4.</span> <span class="nav-text">四种盒子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">5.</span> <span class="nav-text">应用</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a class="theme-link" href="https://github.com/JasonFang93">JasonFang</a></span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io" target="_blank">Hexo</a>
+</div>
+
+<div class="powered-by">
+   皖ICP备15004229号
+</div>
+
+<div class="theme-info">
+  Clone theme -
+  <a class="theme-link" href="https://github.com/xirong/hexo-theme-next/" target="_blank">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

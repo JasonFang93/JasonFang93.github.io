@@ -1,0 +1,654 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="测试," />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="为什么需要单元测试 正确性：测试可以验证代码的正确性，在上线前做到心里有底 自动化：当然手工也可以测试，通过console可以打印出内部信息，但是这是一次性的事情，下次测试还需要从头来过，效率不能得到保证。通过编写测试用例，可以做到一次编写，多次运行 解释性：测试用例用于测试接口、模块的重要性，那么在测试用例中就会涉及如何使用这些API。其他开发人员如果要使用这些API，那阅读测试用例是一种很好地">
+<meta name="keywords" content="测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单元测试——Qunit">
+<meta property="og:url" content="http://blog.youziclub.com/2016/05/08/单元测试——Qunit/index.html">
+<meta property="og:site_name" content="柚子君">
+<meta property="og:description" content="为什么需要单元测试 正确性：测试可以验证代码的正确性，在上线前做到心里有底 自动化：当然手工也可以测试，通过console可以打印出内部信息，但是这是一次性的事情，下次测试还需要从头来过，效率不能得到保证。通过编写测试用例，可以做到一次编写，多次运行 解释性：测试用例用于测试接口、模块的重要性，那么在测试用例中就会涉及如何使用这些API。其他开发人员如果要使用这些API，那阅读测试用例是一种很好地">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-23T17:13:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单元测试——Qunit">
+<meta name="twitter:description" content="为什么需要单元测试 正确性：测试可以验证代码的正确性，在上线前做到心里有底 自动化：当然手工也可以测试，通过console可以打印出内部信息，但是这是一次性的事情，下次测试还需要从头来过，效率不能得到保证。通过编写测试用例，可以做到一次编写，多次运行 解释性：测试用例用于测试接口、模块的重要性，那么在测试用例中就会涉及如何使用这些API。其他开发人员如果要使用这些API，那阅读测试用例是一种很好地">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 单元测试——Qunit | 柚子君 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">柚子君</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              单元测试——Qunit
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        
+        <span class="post-time">
+          <!-- 发表于 -->
+          <span class="iconfont">&#xf19f;</span>
+          <time itemprop="dateCreated" datetime="2016-05-08T00:00:00+08:00" content="2016-05-08">
+            2016-05-08
+          </time>
+        </span>
+
+        
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp;
+            <!-- 分类于 -->
+            <span class="iconfont">&#xf1d0;</span>
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/技术/" itemprop="url" rel="index">
+                  <span itemprop="name">技术</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+
+        
+
+        
+        <span class="post-comments-count">
+          <!-- 暂不支持评论 &nbsp; | &nbsp;
+          <a class="cloud-tie-join-count" href="javascript:void(0);">
+           <span class="join-count" style="color:black">0</span>
+           <span class="join-text">人评论</span>
+         </a> -->
+         
+        </span>
+      </div>
+      
+
+
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="为什么需要单元测试"><a href="#为什么需要单元测试" class="headerlink" title="为什么需要单元测试"></a>为什么需要单元测试</h2><ul>
+<li>正确性：测试可以验证代码的正确性，在上线前做到心里有底</li>
+<li>自动化：当然手工也可以测试，通过console可以打印出内部信息，但是这是一次性的事情，下次测试还需要从头来过，效率不能得到保证。通过编写测试用例，可以做到一次编写，多次运行</li>
+<li>解释性：测试用例用于测试接口、模块的重要性，那么在测试用例中就会涉及如何使用这些API。其他开发人员如果要使用这些API，那阅读测试用例是一种很好地途径，有时比文档说明更清晰</li>
+<li>驱动开发，指导设计：代码被测试的前提是代码本身的可测试性，那么要保证代码的可测试性，就需要在开发中注意API的设计，TDD将测试前移就是起到这么一个作用</li>
+<li>保证重构：互联网行业产品迭代速度很快，迭代后必然存在代码重构的过程，那怎么才能保证重构后代码的质量呢？有测试用例做后盾，就可以大胆的进行重构<a id="more"></a>
+</li>
+</ul>
+<h2 id="测试工具分类"><a href="#测试工具分类" class="headerlink" title="测试工具分类"></a>测试工具分类</h2><ul>
+<li>Qunit、jasmine、mocha、jest、intern<br>各自有各自的优缺点，相对比较流行的有jasmine、mocha和Qunit（待验证）</li>
+<li>Qunit诞生于Jquery团队，但是并不依赖jquery</li>
+</ul>
+<h2 id="Qunit内置断言"><a href="#Qunit内置断言" class="headerlink" title="Qunit内置断言"></a>Qunit内置断言</h2><ul>
+<li>ok()<ul>
+<li>只有一个请求的参数，如果返回值TRUE，这个断言通过，否则就失败。另外它接受1个字符串作为测试测试结果的显示。</li>
+</ul>
+</li>
+<li>equal()<ul>
+<li>常用于简单的使用（==）运算符比较期望参数和真实值，当他们相等的时候，断言通过，否则断言失败。这2个值都会在测试结果中显示，额外的也会显示测试消息。</li>
+<li>严格比较（===），使用 strictEqual() 代替</li>
+</ul>
+</li>
+<li>deepEqual()<ul>
+<li>比 equal() 并且有更多选项。代替使用简单的比较运算符(==),使用更加准确的比较运算符（===）,也能操作NaN，dates，正则表达式，数组，方法等类型，而 equal() 只能测试基本对象类型。</li>
+</ul>
+</li>
+</ul>
+<h2 id="同步回调测试"><a href="#同步回调测试" class="headerlink" title="同步回调测试"></a>同步回调测试</h2><ul>
+<li><p>调用test() 和 expect() 开始测试，使用这个期望断言数量作为参数<br>实际例子</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">QUnit.test( &quot;a test&quot;, function( assert ) &#123;</span><br><span class="line">    expect( 1 );</span><br><span class="line">    var $body = $( &quot;body&quot; );</span><br><span class="line">    $body.on( &quot;click&quot;, function() &#123;</span><br><span class="line">        assert.ok( true, &quot;body was clicked!&quot; );</span><br><span class="line">    &#125;);</span><br><span class="line">    $body.trigger( &quot;click&quot; );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="异步回调测试"><a href="#异步回调测试" class="headerlink" title="异步回调测试"></a>异步回调测试</h2><ul>
+<li><p>当测试代码开始一个timeout 和 interval 或者一个ajax 请求，通过expect、asyncTest 和 start配合使用实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">QUnit.asyncTest( &quot;asynchronous test: video ready to play&quot;, function( assert ) &#123;</span><br><span class="line">    expect( 1 );</span><br><span class="line">    var $video = $( &quot;video&quot; );</span><br><span class="line"></span><br><span class="line">    $video.on( &quot;canplaythrough&quot;, function() &#123;</span><br><span class="line">        assert.ok( true, &quot;video has loaded and is ready to play&quot; );</span><br><span class="line">        QUnit.start();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="测试用户行为"><a href="#测试用户行为" class="headerlink" title="测试用户行为"></a>测试用户行为</h2><ul>
+<li><p>栗子</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">function KeyLogger( target ) &#123;</span><br><span class="line">    if ( !(this instanceof KeyLogger) ) &#123;</span><br><span class="line">        return new KeyLogger( target );</span><br><span class="line">    &#125;</span><br><span class="line">    this.target = target;</span><br><span class="line">    this.log = [];</span><br><span class="line">    var self = this;</span><br><span class="line"></span><br><span class="line">    this.target.off( &quot;keydown&quot; ).on( &quot;keydown&quot;, function( event ) &#123;</span><br><span class="line">        self.log.push( event.keyCode );</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">QUnit.test( &quot;keylogger api behavior&quot;, function( assert ) &#123;</span><br><span class="line">    var event,</span><br><span class="line">    $doc = $( document ),</span><br><span class="line">    keys = KeyLogger( $doc );</span><br><span class="line">    // trigger event</span><br><span class="line">    event = $.Event( &quot;keydown&quot; );</span><br><span class="line">    event.keyCode = 9;</span><br><span class="line">    $doc.trigger( event );</span><br><span class="line">    // verify expected behavior</span><br><span class="line">    assert.equal( keys.log.length, 1, &quot;a key was logged&quot; );</span><br><span class="line">    assert.equal( keys.log[ 0 ], 9, &quot;correct key was logged&quot; );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="自定义断言"><a href="#自定义断言" class="headerlink" title="自定义断言"></a>自定义断言</h2><ul>
+<li><p>定义一个可以重复使用的方法。条用Qunit.push 在方法内部然后告诉QUnit断言已经发生。<br>栗子</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">QUnit.assert.contains = function(needle, haystack, message) &#123;</span><br><span class="line">    var actual = (function() &#123;</span><br><span class="line">        var result = haystack.some(function(val) &#123;</span><br><span class="line">            return val.indexOf(needle) &gt; -1;</span><br><span class="line">        &#125;);</span><br><span class="line">        return result ? needle : &apos;&apos;;</span><br><span class="line">    &#125;());</span><br><span class="line">    this.push(actual, actual, needle, message);</span><br><span class="line">&#125;;</span><br><span class="line">QUnit.test(&quot;retrieving object keys&quot;, function(assert) &#123;</span><br><span class="line">    var arrayKeys = [&quot;apple&quot;, &quot;big&quot;];</span><br><span class="line">    assert.contains(&quot;apple&quot;, arrayKeys, &quot;Array keys&quot;);</span><br><span class="line">    assert.contains(&quot;bigbang&quot;, arrayKeys, &quot;Array keys&quot;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/测试/" rel="tag">#测试</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/12/ajax处理302跳转与内容协商/" rel="prev">ajax处理302跳转与内容协商</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/07/我不知道的行高——line-height/" rel="next">我不知道的行高——line-height</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/logo.jpeg"
+               alt="JasonFang" />
+          <p class="site-author-name" itemprop="name">JasonFang</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么需要单元测试"><span class="nav-number">1.</span> <span class="nav-text">为什么需要单元测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试工具分类"><span class="nav-number">2.</span> <span class="nav-text">测试工具分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Qunit内置断言"><span class="nav-number">3.</span> <span class="nav-text">Qunit内置断言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步回调测试"><span class="nav-number">4.</span> <span class="nav-text">同步回调测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步回调测试"><span class="nav-number">5.</span> <span class="nav-text">异步回调测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试用户行为"><span class="nav-number">6.</span> <span class="nav-text">测试用户行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义断言"><span class="nav-number">7.</span> <span class="nav-text">自定义断言</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a class="theme-link" href="https://github.com/JasonFang93">JasonFang</a></span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io" target="_blank">Hexo</a>
+</div>
+
+<div class="powered-by">
+   皖ICP备15004229号
+</div>
+
+<div class="theme-info">
+  Clone theme -
+  <a class="theme-link" href="https://github.com/xirong/hexo-theme-next/" target="_blank">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
