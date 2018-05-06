@@ -1,0 +1,628 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CSS," />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="提到实现固定定位，多数人第一反应想到的就是使用 position: fixed;，的确，这是最为直接的，也是最为简单的方式；然而，在移动端，position: fixed; 目前的表现并不是那么理想（例如 input 元素获取焦点会影响 fixed 定位），或者需要使一个固定定位的元素支持水平方向上的滚动，fixed 也是不能满足的，因此，笔者将在下文中，结合移动端的例子再介绍两种其他的方式来实现">
+<meta name="keywords" content="CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="巧妙实现固定定位">
+<meta property="og:url" content="http://blog.youziclub.com/2017/09/15/巧妙实现固定定位/index.html">
+<meta property="og:site_name" content="柚子君">
+<meta property="og:description" content="提到实现固定定位，多数人第一反应想到的就是使用 position: fixed;，的确，这是最为直接的，也是最为简单的方式；然而，在移动端，position: fixed; 目前的表现并不是那么理想（例如 input 元素获取焦点会影响 fixed 定位），或者需要使一个固定定位的元素支持水平方向上的滚动，fixed 也是不能满足的，因此，笔者将在下文中，结合移动端的例子再介绍两种其他的方式来实现">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/c4b5f11bly1ff7bo67c6aj20ho0fa777.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/c4b5f11bly1ff7bo5pyksj20hs0f7acv.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/c4b5f11bly1ff7bo6j70cj20hu0f6mzy.jpg">
+<meta property="og:updated_time" content="2018-03-23T17:41:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="巧妙实现固定定位">
+<meta name="twitter:description" content="提到实现固定定位，多数人第一反应想到的就是使用 position: fixed;，的确，这是最为直接的，也是最为简单的方式；然而，在移动端，position: fixed; 目前的表现并不是那么理想（例如 input 元素获取焦点会影响 fixed 定位），或者需要使一个固定定位的元素支持水平方向上的滚动，fixed 也是不能满足的，因此，笔者将在下文中，结合移动端的例子再介绍两种其他的方式来实现">
+<meta name="twitter:image" content="http://wx4.sinaimg.cn/mw690/c4b5f11bly1ff7bo67c6aj20ho0fa777.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 巧妙实现固定定位 | 柚子君 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">柚子君</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              巧妙实现固定定位
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        
+        <span class="post-time">
+          <!-- 发表于 -->
+          <span class="iconfont">&#xf19f;</span>
+          <time itemprop="dateCreated" datetime="2017-09-15T00:00:00+08:00" content="2017-09-15">
+            2017-09-15
+          </time>
+        </span>
+
+        
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp;
+            <!-- 分类于 -->
+            <span class="iconfont">&#xf1d0;</span>
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/技术/" itemprop="url" rel="index">
+                  <span itemprop="name">技术</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+
+        
+
+        
+        <span class="post-comments-count">
+          <!-- 暂不支持评论 &nbsp; | &nbsp;
+          <a class="cloud-tie-join-count" href="javascript:void(0);">
+           <span class="join-count" style="color:black">0</span>
+           <span class="join-text">人评论</span>
+         </a> -->
+         
+        </span>
+      </div>
+      
+
+
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>提到实现固定定位，多数人第一反应想到的就是使用 <code>position: fixed;</code>，的确，这是最为直接的，也是最为简单的方式；然而，在移动端，<code>position: fixed;</code> 目前的表现并不是那么理想（例如 <code>input</code> 元素获取焦点会影响 <code>fixed</code> 定位），或者需要使一个固定定位的元素支持水平方向上的滚动，<code>fixed</code> 也是不能满足的，因此，笔者将在下文中，结合移动端的例子再介绍两种其他的方式来实现固定定位。<br><a id="more"></a></p>
+<h2 id="利用-position-fixed"><a href="#利用-position-fixed" class="headerlink" title="利用 position: fixed;"></a>利用 <code>position: fixed;</code></h2><p>虽然 <code>fixed</code> 或多或少还有些问题，但如果对兼容性要求不是很高的场景下，这种方式还是很好使的。下面结合例子来简要介绍下：</p>
+<h3 id="html"><a href="#html" class="headerlink" title="html:"></a>html:</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">header</span> <span class="attr">class</span>=<span class="string">"bar bar-header"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"title"</span>&gt;</span>header<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"content"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">h2</span>&gt;</span>content<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">		...</span><br><span class="line">		<span class="tag">&lt;<span class="name">p</span>&gt;</span>content-last<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">footer</span> <span class="attr">class</span>=<span class="string">"bar bar-footer"</span>&gt;</span></span><br><span class="line">		fixed：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">placeholder</span>=<span class="string">"搜索"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="css"><a href="#css" class="headerlink" title="css:"></a>css:</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.bar</span> &#123;</span><br><span class="line">   <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">   <span class="attribute">height</span>: <span class="number">40px</span>;</span><br><span class="line">   <span class="attribute">line-height</span>: <span class="number">40px</span>;</span><br><span class="line">   <span class="attribute">text-align</span>: center;</span><br><span class="line">   <span class="attribute">position</span>: fixed;</span><br><span class="line">   <span class="attribute">background</span>: <span class="number">#f00</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.bar-header</span> &#123;</span><br><span class="line">   <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.bar-footer</span> &#123;</span><br><span class="line">   <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.title</span> &#123;</span><br><span class="line">   <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.content</span> &#123;</span><br><span class="line">   <span class="attribute">margin</span>: <span class="number">40px</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://wx4.sinaimg.cn/mw690/c4b5f11bly1ff7bo67c6aj20ho0fa777.jpg" alt="固定定位——fixed"></p>
+<div align="center"><em>图1.固定定位——fixed</em></div>
+
+<h2 id="利用-postion-absolute"><a href="#利用-postion-absolute" class="headerlink" title="利用 postion: absolute;"></a>利用 <code>postion: absolute;</code></h2><p>我们知道 <code>fixed</code> 和 <code>absolute</code> 的定位表现很相似，主要区别在于 <code>fixed</code> 的偏移定位是以窗口为参考，当出现滚动条时，对象不会随着滚动；而 <code>absolute</code> 偏移参照的是离自身最近的定位祖先元素。那么要实现类似 <code>fixed</code> 这种定位效果，可以转换一种角度：头部、主体和底部展示一页的高度，如果有超出的部分，让其能够滚动上来。</p>
+<h3 id="css-1"><a href="#css-1" class="headerlink" title="css:"></a>css:</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">// html 详见第一个例子</span><br><span class="line"><span class="selector-class">.bar</span> &#123;</span><br><span class="line">   <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">   <span class="attribute">height</span>: <span class="number">40px</span>;</span><br><span class="line">   <span class="attribute">line-height</span>: <span class="number">40px</span>;</span><br><span class="line">   <span class="attribute">text-align</span>: center;</span><br><span class="line">   <span class="attribute">position</span>: absolute;</span><br><span class="line">   <span class="attribute">background</span>: <span class="number">#f00</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.bar-header</span> &#123;</span><br><span class="line">   <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.bar-footer</span> &#123;</span><br><span class="line">   <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.title</span> &#123;</span><br><span class="line">   <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.content</span> &#123;</span><br><span class="line">   <span class="attribute">position</span>: absolute;</span><br><span class="line">   <span class="attribute">top</span>: <span class="number">40px</span>;</span><br><span class="line">   <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">   <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">   <span class="attribute">bottom</span>: <span class="number">40px</span>;</span><br><span class="line">   <span class="attribute">overflow-y</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://wx2.sinaimg.cn/mw690/c4b5f11bly1ff7bo5pyksj20hs0f7acv.jpg" alt="固定定位——absolute"></p>
+<div align="center"><em>图2.固定定位——absolute</em></div>
+
+<h3 id="利用-display-flex"><a href="#利用-display-flex" class="headerlink" title="利用 display: flex;"></a>利用 <code>display: flex;</code></h3><p><code>flex</code>，即 “Flexible Box”，用 <code>flex</code> 实现固定定位的原理和用 <code>position: absolute;</code> 基本类似，区别在于，撑起盒子高度的方式不一样——利用了项目的 <code>flex-grow</code> 属性，项目该属性默认是 “0”，表示即使存在剩余空间，项目也不会放大而铺满剩余空间。如果单个项目的 <code>flex-grow</code> 属性设置为 “1”，那该项目将占据剩余的所有空间，其他项目保持其该有的高（宽）度。<br>前文中提到的实现水平方向的滚动，使用 <code>flex</code> 是可以轻松实现的。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">// html 详见第一个例子</span><br><span class="line"><span class="selector-tag">html</span>,<span class="selector-tag">body</span> &#123;</span><br><span class="line">   <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">   <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">   <span class="attribute">padding</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">   <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">   <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">   <span class="attribute">display</span>: flex;</span><br><span class="line">   <span class="attribute">flex-direction</span>: column;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.bar</span> &#123;</span><br><span class="line">   <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">   <span class="attribute">height</span>: <span class="number">40px</span>;</span><br><span class="line">   <span class="attribute">line-height</span>: <span class="number">40px</span>;</span><br><span class="line">   <span class="attribute">text-align</span>: center;</span><br><span class="line">   <span class="attribute">background</span>: <span class="number">#f00</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.title</span> &#123;</span><br><span class="line">   <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.content</span> &#123;</span><br><span class="line">   <span class="attribute">flex</span>: <span class="number">1</span>;</span><br><span class="line">   <span class="attribute">overflow</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://wx4.sinaimg.cn/mw690/c4b5f11bly1ff7bo6j70cj20hu0f6mzy.jpg" alt="固定定位——flex"></p>
+<div align="center"><em>图3.固定定位——flex</em></div>
+
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p><code>fixed</code> 属性结合 input 输入框在移动端的确还有些坑，如果有类似的场景，可以试试用 <code>absolute</code> 或 <code>flex</code> 来实现固定定位。<br>ps：代码仅供参考，如需使用，请自行补充兼容代码；行文如有错误，敬请斧正。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CSS/" rel="tag">#CSS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/15/RN打包那些事儿/" rel="prev">RN 打包那些事儿</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/03/移动前端调试大全/" rel="next">移动前端调试大全</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/logo.jpeg"
+               alt="JasonFang" />
+          <p class="site-author-name" itemprop="name">JasonFang</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#利用-position-fixed"><span class="nav-number">1.</span> <span class="nav-text">利用 position: fixed;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#html"><span class="nav-number">1.1.</span> <span class="nav-text">html:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#css"><span class="nav-number">1.2.</span> <span class="nav-text">css:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用-postion-absolute"><span class="nav-number">2.</span> <span class="nav-text">利用 postion: absolute;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#css-1"><span class="nav-number">2.1.</span> <span class="nav-text">css:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用-display-flex"><span class="nav-number">2.2.</span> <span class="nav-text">利用 display: flex;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写在最后"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a class="theme-link" href="https://github.com/JasonFang93">JasonFang</a></span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io" target="_blank">Hexo</a>
+</div>
+
+<div class="powered-by">
+   皖ICP备15004229号
+</div>
+
+<div class="theme-info">
+  Clone theme -
+  <a class="theme-link" href="https://github.com/xirong/hexo-theme-next/" target="_blank">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

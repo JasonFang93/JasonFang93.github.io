@@ -1,0 +1,629 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Mobile,Hybrid,jsBridge," />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="写在前面从 PhoneGap 开始，发展到现在，Hybrid 方案已经变得相当成熟了，在很多应用中都能见到它的身影，而最具代表性的杀手级应用微信的出现，将 Hybrid 方案推向了一个高潮。Hybrid 应用简单的可以理解为一个可以调用 Native 功能的web app，其中的核心就是借助 jsBridge 实现 js 与 Native 间的相互通信。为什么说相互通信是核心呢，js 与 Nati">
+<meta name="keywords" content="Mobile,Hybrid,jsBridge">
+<meta property="og:type" content="article">
+<meta property="og:title" content="白话 Hybrid 方案（上） —— jsBridge 通信">
+<meta property="og:url" content="http://blog.youziclub.com/2018/05/06/白话 Hybrid 方案（上） —— jsBridge 通信/index.html">
+<meta property="og:site_name" content="柚子君">
+<meta property="og:description" content="写在前面从 PhoneGap 开始，发展到现在，Hybrid 方案已经变得相当成熟了，在很多应用中都能见到它的身影，而最具代表性的杀手级应用微信的出现，将 Hybrid 方案推向了一个高潮。Hybrid 应用简单的可以理解为一个可以调用 Native 功能的web app，其中的核心就是借助 jsBridge 实现 js 与 Native 间的相互通信。为什么说相互通信是核心呢，js 与 Nati">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006cGJIjly1fiza4vwhtkj30b40640sz.jpg">
+<meta property="og:updated_time" content="2018-05-06T17:08:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="白话 Hybrid 方案（上） —— jsBridge 通信">
+<meta name="twitter:description" content="写在前面从 PhoneGap 开始，发展到现在，Hybrid 方案已经变得相当成熟了，在很多应用中都能见到它的身影，而最具代表性的杀手级应用微信的出现，将 Hybrid 方案推向了一个高潮。Hybrid 应用简单的可以理解为一个可以调用 Native 功能的web app，其中的核心就是借助 jsBridge 实现 js 与 Native 间的相互通信。为什么说相互通信是核心呢，js 与 Nati">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006cGJIjly1fiza4vwhtkj30b40640sz.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 白话 Hybrid 方案（上） —— jsBridge 通信 | 柚子君 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">柚子君</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              白话 Hybrid 方案（上） —— jsBridge 通信
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        
+        <span class="post-time">
+          <!-- 发表于 -->
+          <span class="iconfont">&#xf19f;</span>
+          <time itemprop="dateCreated" datetime="2018-05-06T00:00:00+08:00" content="2018-05-06">
+            2018-05-06
+          </time>
+        </span>
+
+        
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp;
+            <!-- 分类于 -->
+            <span class="iconfont">&#xf1d0;</span>
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/技术/" itemprop="url" rel="index">
+                  <span itemprop="name">技术</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+
+        
+
+        
+        <span class="post-comments-count">
+          <!-- 暂不支持评论 &nbsp; | &nbsp;
+          <a class="cloud-tie-join-count" href="javascript:void(0);">
+           <span class="join-count" style="color:black">0</span>
+           <span class="join-text">人评论</span>
+         </a> -->
+         
+        </span>
+      </div>
+      
+
+
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>从 PhoneGap 开始，发展到现在，Hybrid 方案已经变得相当成熟了，在很多应用中都能见到它的身影，而最具代表性的杀手级应用微信的出现，将 Hybrid 方案推向了一个高潮。Hybrid 应用简单的可以理解为一个可以调用 Native 功能的web app，其中的核心就是借助 jsBridge 实现 js 与 Native 间的相互通信。为什么说相互通信是核心呢，js 与 Native 之间又是如何通信的呢？<br><a id="more"></a></p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>我们先来描述一个具体的 Hybrid 项目场景：在客户端中打开了一个页面 A，在 A 页面通过新开一个 view 的方式打开页面 B（表明当前项目不是单页应用），在页面 B 中查看当前手机的网络状态并对客户端导航条的点击事件进行监听，点击导航条上的标题，最后点击返回按钮，回到页面 A；在“新开 view 的方式打开页面”、“查看网络状态”、“监听导航条点击事件”这一系列的操作中，都是借助 Native 来完成的，换句话说就是调用了 Native 的接口来实现的。这些操作（接口）可以分成两类：一是普通调用，例如“查看网络状态”；另一类是事件监听，例如“监听导航条点击事件”。</p>
+<p><img src="https://ws1.sinaimg.cn/mw690/c4b5f11bly1fr23db8doog20go0wo4qr.gif" style="width: 320px; height: 568px;"></p>
+<p>那么，接下来，笔者将结合背景和上文中提出的两个问题，一一来填坑。</p>
+<h2 id="相互通信"><a href="#相互通信" class="headerlink" title="相互通信"></a>相互通信</h2><p>普通调用、事件监听本质上和 js 与 Native 间的相互通信密不可分。无论是查看网络状态还是监听导航条点击事件，都是在 js 层处理的，但操作实际是 Native 控制的，换句话说，js 告诉了 Native 具体的操作，而当 Native 完成这些操作后，需要将操作的结果反馈给 js，这就是 js 与 Native 之间的相互通信。<br>上文背景中提到的两类操作，虽然本质上都是 js 和 Native 的相互通信，但在处理上还是有一定区别的，虽然由于篇幅限制，具体的区别笔者将会在下部 jsBridge 具体实现部分来讲述，但可以来聊聊 jsBridge 具体是什么，在通信中扮演怎么的角色。<br><img src="https://wx1.sinaimg.cn/mw690/71c50075ly1feyxr21wdkj20n905n74c.jpg" alt="jsBridge"><br>jsBridge，顾名思义，js 实现的桥，js 与 Native 的通信必须借助它来完成。笔者理解的 jsBridge 是 Native 注入执行一段 js 代码，并在 js 上下文挂载的一个全局对象（和方法），即 <code>window.bridge</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">bridge:</span><br><span class="line">&#123;</span><br><span class="line">    invoke: function() &#123;</span><br><span class="line">        // js 发送消息给 Native，不同环境，通信方式实现不同</span><br><span class="line">    &#125;,</span><br><span class="line">    // 根据当前 Native 环境分别挂载对应的方法</span><br><span class="line">    __oc2js__: function() &#123;</span><br><span class="line">        // 接收并处理 OC 发给 js 的消息</span><br><span class="line">    &#125;,</span><br><span class="line">    __java2js__: function() &#123;</span><br><span class="line">        // 接收并处理 Java 发给 js 的消息</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Hybrid 方案是基于 WebView 的，js 执行在 WebView 的 Webkit 引擎中。</p>
+<h2 id="js-与-OC-间相互通信"><a href="#js-与-OC-间相互通信" class="headerlink" title="js 与 OC 间相互通信"></a>js 与 OC 间相互通信</h2><h3 id="js-gt-OC"><a href="#js-gt-OC" class="headerlink" title="js -&gt; OC"></a>js -&gt; OC</h3><p>js 调用 Native，给 OC 发消息的方式主要有<code>使用 Ajax 发起请求</code>、<code>注入 API</code>和<code>拦截 URL SCHEME</code>三种方式。笔者主要来聊一聊第一种方式，后两种可以参考附录。<br>使用 Ajax 发起同域请求，将调用参数放在 head 或 body 中，Native 拦截请求，如果命中规则，则调用 Native 对应的方法，否则将其作为视为正常的 Ajax 请求。例如当查看网络状态时，js 发送给 Native 的 handleName 为 <code>network.getType</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">var sendMessageQueue = [&#123;</span><br><span class="line">    handlerName: handlerName,</span><br><span class="line">    data: data,</span><br><span class="line">    // callbackId 作为回调的唯一标识，在返回调用结果给 js 时，根据 callbackId 调用对应的回调方法</span><br><span class="line">    callbackId: id++ + (Math.random() + &apos;&apos;).replace(/\D/g, &quot;&quot;)</span><br><span class="line">&#125;];</span><br><span class="line">function() &#123;</span><br><span class="line">    // Re-using the XHR improves exec() performance by about 10%.</span><br><span class="line">    var xhr = xhr || new XMLHttpRequest();</span><br><span class="line">    // Changing this to a GET will make the XHR reach the URIProtocol on 4.2.</span><br><span class="line">    // For some reason it still doesn&apos;t work though...</span><br><span class="line">    // Add a timestamp to the query param to prevent caching.</span><br><span class="line">    xhr.open(&apos;HEAD&apos;, requestPath + (+new Date()));</span><br><span class="line">    xhr.setRequestHeader(&apos;data&apos;, encodeURI(JSON.stringify(sendMessageQueue)));</span><br><span class="line">    //INFO &apos;Send message over xhr:&apos;, JSON.stringify(sendMessageQueue)</span><br><span class="line">    xhr.send(null);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="OC-gt-js"><a href="#OC-gt-js" class="headerlink" title="OC -&gt; js"></a>OC -&gt; js</h3><p>OC 调用 js 方法，回传数据给 js 的方式相对比较简单，通过 Native 通过的接口调用 js 代码。调用的 js 方法即是挂载在 bridge 上的 <code>__oc2js__</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[uiWebview stringByEvaluatingJavaScriptFromString:jsFunction];</span><br></pre></td></tr></table></figure>
+<h2 id="js-与-Java-间相互通信"><a href="#js-与-Java-间相互通信" class="headerlink" title="js 与 Java 间相互通信"></a>js 与 Java 间相互通信</h2><h3 id="js-gt-Java"><a href="#js-gt-Java" class="headerlink" title="js -&gt; Java"></a>js -&gt; Java</h3><p>js 调用 Native，给 Java 发消息的方式主要有<code>拦截通信通道</code>、<code>注入 API</code>两种方式。笔者主要来聊一聊第一种方式，后一种同样可以参考附录。<br>借助 WebView 的 <code>setWebChromeClient</code> 方法设置 <code>WebChromeClient</code> 对象，对象包含 <code>onJsAlert</code>，<code>onJsConfirm</code>，<code>onJsPrompt</code> 三个方法，与 js 的 <code>alert</code>、<code>confirm</code> 和 <code>prompt</code> 对应，但由于前两个 js 方法使用场景相比 <code>prompt</code> 更多，所以一般 js 与 Java 通信使用 <code>prompt</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function(sendMessageQueue) &#123;</span><br><span class="line">    //promptName 是使用prompt传值的标识</span><br><span class="line">    //INFO &apos;Send message through prompt:&apos;, sendMessageQueue</span><br><span class="line">    prompt(JSON.stringify(sendMessageQueue), promptName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Java-gt-js"><a href="#Java-gt-js" class="headerlink" title="Java -&gt; js"></a>Java -&gt; js</h3><p>Java 调用 js 方法，回传数据给 js 的方式与 OC 一样，也相对比较简单，通过 Native 通过的接口调用 js 代码。调用的 js 方法即是挂载在 bridge 上的 <code>__java2js__</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">webView.evaluateJavascript(jsFunction, <span class="keyword">new</span> ValueCallback&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceiveValue</span><span class="params">(String value)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WebView.loadUrl(<span class="string">"javascript:"</span> + jsFunction);</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在这篇文章中，笔者主要以一个具体的 Hybrid 调用实例作为切入点，聊了聊 js 与 Native 间是如何通过 jsBridge 实现通信的；关于 jsBridge 具体的加载流程和实现，且听我下回分解。<br>附录：<a href="https://blog.ymfe.org/%E6%B7%B7%E5%90%88%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84JSBridge/" target="_blank" rel="noopener">移动混合开发中的 JSBridge</a></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mobile/" rel="tag">#Mobile</a>
+          
+            <a href="/tags/Hybrid/" rel="tag">#Hybrid</a>
+          
+            <a href="/tags/jsBridge/" rel="tag">#jsBridge</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/15/RN打包那些事儿/" rel="next">RN 打包那些事儿</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/logo.jpeg"
+               alt="JasonFang" />
+          <p class="site-author-name" itemprop="name">JasonFang</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相互通信"><span class="nav-number">3.</span> <span class="nav-text">相互通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#js-与-OC-间相互通信"><span class="nav-number">4.</span> <span class="nav-text">js 与 OC 间相互通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#js-gt-OC"><span class="nav-number">4.1.</span> <span class="nav-text">js -&gt; OC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OC-gt-js"><span class="nav-number">4.2.</span> <span class="nav-text">OC -&gt; js</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#js-与-Java-间相互通信"><span class="nav-number">5.</span> <span class="nav-text">js 与 Java 间相互通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#js-gt-Java"><span class="nav-number">5.1.</span> <span class="nav-text">js -&gt; Java</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-gt-js"><span class="nav-number">5.2.</span> <span class="nav-text">Java -&gt; js</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a class="theme-link" href="https://github.com/JasonFang93">JasonFang</a></span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io" target="_blank">Hexo</a>
+</div>
+
+<div class="powered-by">
+   皖ICP备15004229号
+</div>
+
+<div class="theme-info">
+  Clone theme -
+  <a class="theme-link" href="https://github.com/xirong/hexo-theme-next/" target="_blank">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
