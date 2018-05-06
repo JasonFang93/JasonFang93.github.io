@@ -3,12 +3,16 @@ category: 技术
 date: 2018-05-06 00:00:00
 tags: [Mobile, Hybrid, jsBridge]
 photos: [https://ws1.sinaimg.cn/large/006cGJIjly1fiza4vwhtkj30b40640sz.jpg]
+---
 
 ## 写在前面
 从 PhoneGap 开始，发展到现在，Hybrid 方案已经变得相当成熟了，在很多应用中都能见到它的身影，而最具代表性的杀手级应用微信的出现，将 Hybrid 方案推向了一个高潮。Hybrid 应用简单的可以理解为一个可以调用 Native 功能的web app，其中的核心就是借助 jsBridge 实现 js 与 Native 间的相互通信。为什么说相互通信是核心呢，js 与 Native 之间又是如何通信的呢？
+<!-- more -->
 ## 背景
 我们先来描述一个具体的 Hybrid 项目场景：在客户端中打开了一个页面 A，在 A 页面通过新开一个 view 的方式打开页面 B（表明当前项目不是单页应用），在页面 B 中查看当前手机的网络状态并对客户端导航条的点击事件进行监听，点击导航条上的标题，最后点击返回按钮，回到页面 A；在“新开 view 的方式打开页面”、“查看网络状态”、“监听导航条点击事件”这一系列的操作中，都是借助 Native 来完成的，换句话说就是调用了 Native 的接口来实现的。这些操作（接口）可以分成两类：一是普通调用，例如“查看网络状态”；另一类是事件监听，例如“监听导航条点击事件”。
-![demo——fixed-c320](https://ws1.sinaimg.cn/mw690/c4b5f11bly1fr23db8doog20go0wo4qr.gif)
+
+<img src="https://ws1.sinaimg.cn/mw690/c4b5f11bly1fr23db8doog20go0wo4qr.gif" style="width: 320px; height: 568px;" />
+
 那么，接下来，笔者将结合背景和上文中提出的两个问题，一一来填坑。
 
 ## 相互通信
